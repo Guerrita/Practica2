@@ -34,21 +34,40 @@ public class LSLC {
 
     void recorrre(){
         nodoSimple p;
-        if (!esVacia()) {
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
             p = getPrimero();
-            while (!finDeRecorrido(p)) {
+            do { //Como el fin de recorrido se acabacuando x == primero entonces primero se tiene que realizar una vez el recorrido, por lo menos
                 JOptionPane.showMessageDialog(null, String.valueOf(p.getDato()));
                 p = p.getLiga();
-            }
+            }while (!finDeRecorrido(p));
         }else JOptionPane.showMessageDialog(null, "La lista esta vacia");
 
     }
 
-    nodoSimple buscaDondeInsertar(int d){
+    nodoSimple buscaDondeInsertarAscendentemente(int d){ //////////////////////////PPROBAR //////////////////////////////////////////
         nodoSimple p,ap;
         p=getPrimero();
         ap = anterior(p);
+        if (p.getDato() < d) {
+            ap = p;
+            p = p.getLiga();
+        }
         while (!finDeRecorrido(p) && p.getDato() < d) {
+            ap =p;
+            p=p.getLiga();
+        }
+        return ap;
+    }
+
+    nodoSimple buscaDondeInsertarDescendentemente(int d){ //////////////////////////PPROBAR //////////////////////////////////////////
+        nodoSimple p,ap;
+        p=getPrimero();
+        ap = anterior(p);
+        if (p.getDato() > d) {
+            ap = p;
+            p = p.getLiga();
+        }
+        while (!finDeRecorrido(p) && p.getDato() > d) {
             ap =p;
             p=p.getLiga();
         }
@@ -71,15 +90,18 @@ public class LSLC {
         conectar(x,y);
     }
 
-    void conectar(nodoSimple x, nodoSimple y) {
+    void conectar(nodoSimple x, nodoSimple y) {////////////////////////////////////////////CAMBIAR////////////////////////////////////////7
         if (y != null) {
             x.setLiga(y.getLiga());
             y.setLiga(x);
-            if (y == ultimo) ultimo = x;
+            if (y == ultimo) {
+                ultimo = x;
+            }
         } else {
             x.setLiga(primero);
             if (primero == null) ultimo = x;
             primero = x;
+            ultimo.setLiga(primero);
         }
     }
 
@@ -106,6 +128,10 @@ public class LSLC {
         nodoSimple x;
         x=getPrimero();
         y = anterior(x);
+        if(x.getDato() != d){
+            y =x;
+            x=x.getLiga();
+        }
         while (!finDeRecorrido(x) && x.getDato() != d) {
             y =x;
             x=x.getLiga();
@@ -141,4 +167,24 @@ public class LSLC {
             }
         }
     }
+
+
+    //Estos metodos nos ayudaran a crear las LSLC: L0,L2,L3,L5.
+    public void insertarAlInicio(Integer d){
+        insertar(d,null);
+    }
+    public void insertarAlFinal(Integer d){
+        nodoSimple y = this.getUltimo();
+        insertar(d,y);
+    }
+    public void insertarAscendentemente(Integer d){
+        nodoSimple y = buscaDondeInsertarAscendentemente(d);
+        insertar(d,y);
+    }
+
+    public void insertarDescendentemente(Integer d){
+        nodoSimple y = buscaDondeInsertarDescendentemente(d);
+        insertar(d,y);
+    }
+
 }
