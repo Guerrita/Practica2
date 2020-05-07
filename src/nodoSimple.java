@@ -1,18 +1,18 @@
 public class nodoSimple {
-    private int dato;
+    private Integer dato;
     private nodoSimple liga;
 
-    public nodoSimple(int dato) {
+    public nodoSimple(Integer dato) {
         this.dato = dato;
         this.liga = null;
     }
 
 
-    public int getDato() {
+    public Integer getDato() {
         return dato;
     }
 
-    public void setDato(int dato) {
+    public void setDato(Integer dato) {
         this.dato = dato;
     }
 
