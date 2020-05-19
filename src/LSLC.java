@@ -33,7 +33,7 @@ public class LSLC {
         return x==primero;
     }
 
-    public void recorrre(){
+    public void recorre(){
         nodoSimple p;
         String mensaje="";
         if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
@@ -101,11 +101,11 @@ public class LSLC {
             x.setLiga(y.getLiga());
             y.setLiga(x);
             if (y == ultimo) {
-                ultimo = x;
+                setUltimo(x);
             }
         } else {
             x.setLiga(primero);
-            if (primero == null) ultimo = x;
+            if (primero == null) setUltimo(x);
             primero = x;
             ultimo.setLiga(primero);
         }
@@ -122,11 +122,11 @@ public class LSLC {
     public void desconectar(nodoSimple x /*Nodo a desconectar*/, nodoSimple y /*Nodo anterior al que se desconectara*/) { //Desconecta dos nodos simples
         if (x!=primero){
             y.setLiga(x.getLiga());
-            if (x==ultimo)ultimo=y;
+            if (x==ultimo)setUltimo(y);
         }
         else {
             primero=primero.getLiga();
-            if (primero==null)ultimo=null;
+            if (primero==null)setUltimo(null);
         }
     }
 
@@ -251,6 +251,32 @@ public class LSLC {
                 anm = menor;
             }
         }
+
+
+        //Ordena descendentemente desde la mitad del vector hasta el final
+        anm = anterior(nodoMitad);
+        while (nodoMitad != lzeta.getUltimo()) {
+            menor = nodoMitad;
+            amenor = anm;
+            q = nodoMitad.getLiga();
+            aq = nodoMitad;
+            while (!finDeRecorrido(q)) {
+                if (q.getDato() > menor.getDato()) {
+                    menor = q;
+                    amenor = aq;
+                }
+                aq = q;
+                q = q.getLiga();
+            }
+            if (menor == nodoMitad) {
+                anm = nodoMitad;
+                nodoMitad = nodoMitad.getLiga();
+            } else {
+                desconectar(menor, amenor);
+                conectar(menor, anm);
+                anm = menor;
+            }
+        }
     }
 
         //Estos metodos nos ayudaran a crear las LSLC: L0,L2,L3,L5.
@@ -271,4 +297,145 @@ public class LSLC {
         insertar(d,y);
     }
 
+    //Metodos practica 2
+
+    public LSLC interseccionLdosLtres(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do { //Como el fin de recorrido se acabacuando x == primero entonces primero se tiene que realizar una vez el recorrido, por lo menos
+                if (p.getDato()%3==0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    public LSLC interseccionLdosLcinco(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%5==0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    public LSLC interseccionLtresLcinco(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%5==0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    public LSLC interseccionLdosLtresLcinco(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%5==0 && p.getDato()%3==0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+
+    public LSLC ldosNoLtresNoLcinco(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%5!=0 && p.getDato()%3!=0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    public LSLC ltresNoLdosNoLcinco(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%5!=0 && p.getDato()%2!=0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    
+    public LSLC lcincoNoLtresNoLdos(){
+        LSLC lista = new LSLC();
+        nodoSimple p;
+        if (!esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = getPrimero();
+            do {
+                if (p.getDato()%2!=0 && p.getDato()%3!=0){
+                    lista.insertarAlInicio(p.getDato());
+                }
+                p = p.getLiga();
+            }while (!finDeRecorrido(p));
+        }
+        return lista;
+    }
+
+    public void lz(LSLC lcero, LSLC ldos,LSLC ltres, LSLC lcinco){
+        nodoSimple p;
+        if (!lcero.esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = lcero.getPrimero();
+            do {
+                insertarAscendentemente(p.getDato());
+                p = p.getLiga();
+            }while (!lcero.finDeRecorrido(p));
+        }
+        if (!ldos.esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = ldos.getPrimero();
+            do {
+                insertarAscendentemente(p.getDato());
+                p = p.getLiga();
+            }while (!ldos.finDeRecorrido(p));
+        }
+        if (!ltres.esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = ltres.getPrimero();
+            do {
+                if (p.getDato()%2!=0)insertarAscendentemente(p.getDato());
+                p = p.getLiga();
+            }while (!ltres.finDeRecorrido(p));
+        }
+        if (!lcinco.esVacia()) {//Hay que tener presente que la lista no puede estar vacia
+            p = lcinco.getPrimero();
+            do {
+                if (p.getDato()%2!=0 && p.getDato()%3!=0)insertarAscendentemente(p.getDato());
+                p = p.getLiga();
+            }while (!lcinco.finDeRecorrido(p));
+        }
+
+    }
 }
